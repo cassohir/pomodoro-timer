@@ -24,8 +24,8 @@ interface CyclesContextProviderProps {
 
 interface CyclesContextType {
   cycles: Cycle[];
-  activeCycle: Cycle | undefined;
-  activeCycleId: string | null;
+  activeCycle: Cycle | undefined | null | {};
+  activeCycleId: string | null | {};
   amountSecondsPassed: number;
   markCurrentCycleAsFinished: () => void;
   setSecondsPassed: (seconds: number) => void;
