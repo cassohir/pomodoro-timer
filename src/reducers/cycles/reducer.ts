@@ -37,6 +37,20 @@ export function cyclesReducer(state: CyclesState, action: any) {
         draft.cycles[currentCycleIndex].interruptedDate = new Date();
       });
     }
+    case ActionTypes.PAUSE_CURRENT_CYCLE: {
+      const currentCycleIndex = state.cycles.findIndex((cycle) => {
+        return cycle.id === state.activeCycleId;
+      });
+
+      if (currentCycleIndex < 0) {
+        return state;
+      }
+
+      return produce(state, (draft) => {
+        draft.activeCycleId = null;
+      });
+    }
+
     case ActionTypes.MARK_AS_FINISHED: {
       const currentCycleIndex = state.cycles.findIndex((cycle) => {
         return cycle.id === state.activeCycleId;

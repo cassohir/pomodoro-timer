@@ -1,0 +1,23 @@
+{
+  "name": "pomodoro-timer",
+  "displayName": "Pomodoro Time",
+  "description": "A simple Pomodoro timer for your productivity needs.",
+  "version": "1.0.0",
+  "publisher": "cassio_izidorio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cassohir/pomodoro-timer"
+  },
+  "categories": [
+    "Productivity"
+  ],
+  "keywords": [
+    "pomodoro",
+    "timer",
+    "productivity"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ]
+}

@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import {
-  ActionTypes,
+  pauseCurrentCycleAction,
   addNewCycleAction,
   interruptCurrentCycleAction,
   markCurrentCycleAsFinishedAction,
@@ -24,13 +24,15 @@ interface CyclesContextProviderProps {
 
 interface CyclesContextType {
   cycles: Cycle[];
-  activeCycle: Cycle | undefined | null | {};
-  activeCycleId: string | null | {};
   amountSecondsPassed: number;
+  activeCycleId: string | null | {};
+  activeCycle: Cycle | undefined | null;
+
+  pauseCurrentCycle: () => void;
+  interruptCurrentCycle: () => void;
   markCurrentCycleAsFinished: () => void;
   setSecondsPassed: (seconds: number) => void;
   createNewCycle: (data: CreateCycleData) => void;
-  interruptCurrentCycle: () => void;
 }
 
 export const CyclesContext = createContext({} as CyclesContextType);
@@ -46,13 +48,15 @@ export function CyclesContextProvider({
     },
     () => {
       const storedStateAsJSON = localStorage.getItem(
-        "@pomodoro-timer:cycles-state-1.0.0",
+        "@pomodoro-timer:cycles-state-1.0.0"
       );
       if (storedStateAsJSON) {
         return JSON.parse(storedStateAsJSON);
       }
-    },
+      return { cycles: [], activeCycleId: null };
+    }
   );
+
   const { cycles, activeCycleId } = cyclesState;
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
@@ -70,7 +74,6 @@ export function CyclesContextProvider({
 
   function markCurrentCycleAsFinished() {
     dispatch(markCurrentCycleAsFinishedAction);
-    console.log("success");
   }
   function setSecondsPassed(seconds: number) {
     setAmountSecondsPassed(seconds);
@@ -84,7 +87,6 @@ export function CyclesContextProvider({
       startDate: new Date(),
     };
     dispatch(addNewCycleAction(newCycle));
-    console.log("success");
 
     setAmountSecondsPassed(0);
   }
@@ -94,16 +96,22 @@ export function CyclesContextProvider({
     document.title = "Pomodoro Timer";
   }
 
+  function pauseCurrentCycle() {
+    dispatch(pauseCurrentCycleAction());
+    document.title = "Pomodoro Timer";
+  }
+
   return (
     <CyclesContext.Provider
       value={{
         activeCycle,
         activeCycleId,
-        markCurrentCycleAsFinished,
-        amountSecondsPassed,
-        setSecondsPassed,
         createNewCycle,
+        setSecondsPassed,
+        pauseCurrentCycle,
+        amountSecondsPassed,
         interruptCurrentCycle,
+        markCurrentCycleAsFinished,
         cycles,
       }}
     >
